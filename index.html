@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Krishna</title>
+
+<style>
+:root{
+  --ink:#2a1c24;
+  --rose:#d6336c;
+  --soft:#f6edf2;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top, #ffffff, #f6edf2 55%, #ead5df);
+  color:var(--ink);
+}
+
+#login{
+  text-align:center;
+  animation:fadeIn 1s ease;
+}
+
+input{
+  padding:12px;
+  font-size:16px;
+  border-radius:8px;
+  border:1.6px solid var(--rose);
+  background:transparent;
+  outline:none;
+}
+
+button{
+  margin-top:14px;
+  padding:10px 28px;
+  border:none;
+  border-radius:999px;
+  background:var(--rose);
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
+
+#container{
+  display:none;
+  max-width:720px;
+  text-align:center;
+  padding:20px;
+}
+
+/* hierarchy */
+.name{
+  font-size:3.2em;
+  font-weight:900;
+  letter-spacing:3px;
+  opacity:0;
+}
+
+.miss{
+  margin-top:10px;
+  font-size:3.6em;
+  font-weight:900;
+  color:var(--rose);
+  opacity:0;
+}
+
+.paragraph{
+  margin-top:26px;
+  font-size:1.35em;
+  line-height:1.6;
+  opacity:0;
+}
+
+/* animations */
+.reveal{
+  animation:riseFade 1.2s ease forwards;
+}
+
+@keyframes riseFade{
+  from{opacity:0; transform:translateY(18px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* heartbeat only on MISS YOU */
+.pulse{
+  animation:pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  35%{transform:scale(1.07);}
+  70%{transform:scale(1);}
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div id="login">
+  <h2 style="font-weight:600;">Only for you</h2>
+  <input type="password" id="pass" placeholder="Password">
+  <br>
+  <button onclick="unlock()">Unlock</button>
+</div>
+
+<div id="container">
+
+  <div id="l1" class="name">KRISHNA</div>
+  <div id="l2" class="miss">I MISS YOU</div>
+
+  <div id="p1" class="paragraph">
+    I miss you more than I show.  
+    Some days I act normal, but inside my mind keeps coming back to you.
+  </div>
+
+  <div id="p2" class="paragraph">
+    I remember small things — your voice, your way of talking,  
+    how calm I felt around you.
+  </div>
+
+  <div id="p3" class="paragraph">
+    Life feels a little empty without that.
+  </div>
+
+  <div id="p4" class="paragraph">
+    I am not writing to pressure you or expect anything.
+    I just wanted you to know that you mattered to me,
+    and you still do.
+  </div>
+
+  <div id="p5" class="paragraph">
+    Even silence from you says something,
+    and I feel it every day.
+  </div>
+
+  <audio id="beat" src="kiss_the_rain.mp3" preload="auto" loop></audio>
+</div>
+
+<script>
+const PASSWORD = "chinu168";
+const MAX_ATTEMPTS = 3;
+
+// Get attempts from localStorage or start fresh
+let attemptsLeft = localStorage.getItem("attemptsLeft");
+if (attemptsLeft === null) {
+  attemptsLeft = MAX_ATTEMPTS;
+  localStorage.setItem("attemptsLeft", attemptsLeft);
+} else {
+  attemptsLeft = parseInt(attemptsLeft);
+}
+
+// Check if already locked
+if (attemptsLeft <= 0) {
+  lockPage();
+}
+
+function unlock() {
+  if (attemptsLeft <= 0) return;
+
+  const input = document.getElementById("pass").value;
+
+  if (input !== PASSWORD) {
+    attemptsLeft--;
+    localStorage.setItem("attemptsLeft", attemptsLeft);
+
+    if (attemptsLeft > 0) {
+      alert(`Wrong password. ${attemptsLeft} attempt(s) left.`);
+    } else {
+      lockPage();
+    }
+    return;
+  }
+
+  // Correct password — reset attempts so it doesn't lock later
+  localStorage.removeItem("attemptsLeft");
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("container").style.display = "block";
+
+  const beat = document.getElementById("beat");
+  beat.volume = 0.55;
+  beat.play();
+
+  setTimeout(()=>{l1.classList.add("reveal")},400);
+  setTimeout(()=>{l2.classList.add("reveal","pulse")},1300);
+  setTimeout(()=>{p1.classList.add("reveal")},2600);
+  setTimeout(()=>{p2.classList.add("reveal")},3800);
+  setTimeout(()=>{p3.classList.add("reveal")},5000);
+  setTimeout(()=>{p4.classList.add("reveal")},6200);
+  setTimeout(()=>{p5.classList.add("reveal")},7600);
+}
+
+function lockPage() {
+  localStorage.setItem("attemptsLeft", 0);
+  const login = document.getElementById("login");
+  login.innerHTML = "<h2>This wasn’t meant to be forced.</h2>";
+}
+</script>
+</body>
+</html>
